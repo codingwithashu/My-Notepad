@@ -172,7 +172,7 @@ export function TipTapEditor({ content, onChange, noteId }: TipTapEditorProps) {
 
       const data = await res.json();
       const baseUrl =
-        process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+        process.env.NEXT_PUBLIC_BASE_URL;
       const imageUrl = `${baseUrl.replace(/\/$/, "")}${data.url}`;
 
       editor.chain().focus().setImage({ src: imageUrl, alt: file.name }).run();
