@@ -3,8 +3,9 @@
 A modern, offline-first, feature-rich notepad built with **Next.js**, **TypeScript**, **Tailwind CSS**, and **TipTap**, enhanced by **OpenAI-powered tools**.  
 Perfect for writers, students, thinkers, and creators.
 
-(![My Notepad Preview](./screenshot1.jpg))
+![My Notepad Preview](./public/screenshot1.jpg)
 
+![My Notepad Preview](./public/screenshot2.jpg)
 ---
 
 ## 🚀 Features
