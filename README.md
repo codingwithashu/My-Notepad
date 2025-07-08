@@ -33,7 +33,7 @@ Perfect for writers, students, thinkers, and creators.
 
 ## 📸 Live Demo
 
-🔗 [View Live App](https://your-demo-url.com)
+🔗 [View Live App](https://my-notepad-nu.vercel.app/)
 
 ---
 
