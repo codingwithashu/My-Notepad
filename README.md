@@ -56,3 +56,49 @@ Make sure you have:
 ```bash
 git clone https://github.com/yourusername/my-notepad.git
 cd my-notepad
+```
+### 📥 Step 2: Install Dependencies
+
+```bash
+pnpm install
+```
+
+Or with npm:
+
+```bash
+npm install
+```
+
+Or with yarn:
+
+```bash
+yarn install
+```
+
+### 🧪 Step 3: Run the Development Server
+
+```bash
+pnpm dev
+# or
+npm run dev
+# or
+yarn dev
+```
+
+## 🔐 Environment Variables
+
+To enable AI features and configure your app's base URL, create a `.env.local` file in the root of the project and add the following:
+
+```env
+# Your OpenAI API key (required for AI features like summarization, title generation, etc.)
+OPENAI_API_KEY=your_openai_api_key_here
+
+# Base URL of your deployed site (used for dynamic links or metadata)
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+
+```
+
+---
+
+Let me know if you want to add optional variables (like default templates, AI model version, or feature toggles)!
+
