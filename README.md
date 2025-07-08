@@ -1,49 +1,56 @@
 # ✨ My Notepad — The Ultimate Offline AI-Powered Notepad
 
-A modern, full-featured, offline-capable notepad built with ⚡️ **Next.js**, ✨ **TipTap Editor**, 🧠 **OpenAI-powered tools**, and 🌗 **dark/light mode**.  
+A modern, offline-first, feature-rich notepad built with **Next.js**, **TypeScript**, **Tailwind CSS**, and **TipTap**, enhanced by **OpenAI-powered tools**.  
 Perfect for writers, students, thinkers, and creators.
 
-![My Notepad Preview](https://your-demo-screenshot-url.com/preview.png)
+![My Notepad Preview](https://your-demo-image-url.com/preview.png)
 
 ---
 
 ## 🚀 Features
 
-- 📝 **Rich Text Editor** (TipTap) with:
+- 📝 **Rich Text Editing** with:
   - Bold, italic, underline, strikethrough
-  - Headings (H1-H3), bullet lists, task lists
-  - Code blocks, blockquotes, tables, images
-- 💾 **Offline Auto-Save** to `localStorage` (never lose progress!)
-- 🌗 **Dark / Light Mode** with saved preference
-- 🧠 **AI Assistant (OpenAI)**:
+  - Headings (H1–H3), bullet and ordered lists, task lists
+  - Code blocks, blockquotes, alignment, subscripts/superscripts
+  - Resizable tables and image upload
+- 💾 **Auto-Save** to `localStorage` (offline-ready)
+- 🌗 **Dark / Light Mode** with persistent setting
+- 🧠 **AI Assistant** powered by OpenAI:
   - Summarize notes
   - Improve writing
-  - Auto title suggestions
-- 🧩 **Custom Templates** for quick-start writing
-- 📤 **Export to PDF, HTML, TXT**
-- 🖼️ **Image Upload Support**
-- 🔄 **Reset / Clear Notes**
-- 🧘‍♂️ **Distraction-Free UI**
-- 📱 Fully responsive across devices
+  - Smart title suggestions
+- 🧩 **Templates** for quick writing
+- 📤 **Export Notes** as PDF, HTML, or TXT
+- 🔄 **Reset Button** to clear notes
+- 🧘‍♂️ **Distraction-Free Fullscreen UI**
+- 📱 Fully responsive – works great on all devices
 
-> Everything works **offline**, even AI tools (if cached after first use)!
-
----
-
-## 📸 Demo
-
-🔗 [Live Demo](https://your-live-demo-url.com)
+> All core features work **100% offline** after the first load.
 
 ---
 
-## 🛠️ Installation Guide
+## 📸 Live Demo
+
+🔗 [View Live App](https://your-demo-url.com)
+
+---
+
+## 🛠️ Installation
+
+Follow these simple steps to run **My Notepad** locally.
 
 ### 📦 Requirements
 
-- Node.js `v18+`
-- pnpm / yarn / npm
+Make sure you have:
 
-### 🧰 Clone the Repo
+- [Node.js](https://nodejs.org/en/download/) `v18+`
+- [pnpm](https://pnpm.io/) (or use `npm` / `yarn`)
+- An [OpenAI API key](https://platform.openai.com/account/api-keys) (optional)
+
+---
+
+### 🧰 Step 1: Clone the Repository
 
 ```bash
 git clone https://github.com/yourusername/my-notepad.git
