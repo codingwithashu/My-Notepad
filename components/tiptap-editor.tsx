@@ -88,9 +88,11 @@ export function TipTapEditor({ content, onChange, noteId }: TipTapEditorProps) {
         lowlight,
       }),
       Image.configure({
+        inline: false,
         HTMLAttributes: {
           class: "max-w-full h-auto rounded-lg",
         },
+        allowBase64: true,
       }),
       Link.configure({
         openOnClick: false,
@@ -167,7 +169,7 @@ export function TipTapEditor({ content, onChange, noteId }: TipTapEditorProps) {
     fileInputRef.current?.click();
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -175,8 +177,13 @@ export function TipTapEditor({ content, onChange, noteId }: TipTapEditorProps) {
     reader.onload = () => {
       const base64 = reader.result as string;
 
+      // Insert image as Base64 directly into editor
       editor.chain().focus().setImage({ src: base64, alt: file.name }).run();
-      toast({ title: "Image added", description: "Stored locally in note." });
+
+      toast({
+        title: "Image added",
+        description: "This image is stored locally in your note.",
+      });
     };
     reader.readAsDataURL(file);
   };
@@ -525,7 +532,6 @@ export function TipTapEditor({ content, onChange, noteId }: TipTapEditorProps) {
         />
       )}
 
-      {/* Hidden file input for image upload */}
       <input
         type="file"
         ref={fileInputRef}

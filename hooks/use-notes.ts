@@ -8,7 +8,6 @@ export function useNotes() {
   const [currentNoteId, setCurrentNoteId] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  // Load notes from IndexedDB
   useEffect(() => {
     const loadNotes = async () => {
       const allNotes = await db.notes.toArray()

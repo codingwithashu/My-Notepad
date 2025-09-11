@@ -29,11 +29,15 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { useNotes } from "@/hooks/use-notes";
 import { marked } from "marked";
+import { JsonViewer } from "./json-viewer";
+import { JsonModal } from "./json-modal";
 
 export function Notepad() {
   const [isGeneratingTitle, setIsGeneratingTitle] = useState(false);
   const [showNoteManager, setShowNoteManager] = useState(false);
   const [showTemplates, setShowTemplates] = useState(false);
+  const [showJsonViewer, setShowJsonViewer] = useState(false);
+
   const { toast } = useToast();
 
   const {
@@ -48,9 +52,9 @@ export function Notepad() {
 
   // Handle content changes with auto-save
   const handleContentChange = useCallback(
-    (newContent: string) => {
+    async (newContent: string) => {
       if (currentNote) {
-        updateNote(currentNote.id, { content: newContent });
+        await updateNote(currentNote.id, { content: newContent });
       }
     },
     [currentNote, updateNote]
@@ -368,6 +372,7 @@ export function Notepad() {
             content={currentNote.content}
             title={currentNote.title}
           />
+          <JsonModal />
           <Button
             variant="outline"
             size="sm"
