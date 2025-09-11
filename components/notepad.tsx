@@ -25,6 +25,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useDebouncedCallback } from "use-debounce";
 
 import { useToast } from "@/hooks/use-toast";
 import { useNotes } from "@/hooks/use-notes";
@@ -50,24 +51,21 @@ export function Notepad() {
     isLoading,
   } = useNotes();
 
-  // Handle content changes with auto-save
-  const handleContentChange = useCallback(
+  const handleContentChange = useDebouncedCallback(
     async (newContent: string) => {
-      if (currentNote) {
+      if (currentNote && newContent !== currentNote.content) {
         await updateNote(currentNote.id, { content: newContent });
       }
     },
-    [currentNote, updateNote]
+    500
   );
 
-  // Handle title changes
   const handleTitleChange = (newTitle: string) => {
     if (currentNote) {
       updateNote(currentNote.id, { title: newTitle });
     }
   };
 
-  // Generate AI title
   const generateAITitle = async () => {
     if (!currentNote?.content.trim()) {
       toast({
@@ -405,9 +403,6 @@ export function Notepad() {
         content={currentNote.content}
         onContentUpdate={handleContentChange}
       />
-
-      {/* Premium Features */}
-      <PremiumFeatures />
 
       {/* Note Manager Modal */}
       <NoteManager
