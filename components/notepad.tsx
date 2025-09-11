@@ -19,6 +19,13 @@ import {
   FileText,
   FolderOpen,
 } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 import { useToast } from "@/hooks/use-toast";
 import { useNotes } from "@/hooks/use-notes";
 import { marked } from "marked";
@@ -101,9 +108,9 @@ export function Notepad() {
   };
 
   // Reset function
-  const handleReset = () => {
+  const handleReset = async () => {
     if (currentNote) {
-      updateNote(currentNote.id, {
+      await updateNote(currentNote.id, {
         title: "Untitled Note",
         content: "",
         tags: [],
@@ -116,8 +123,8 @@ export function Notepad() {
   };
 
   // Create new note
-  const handleNewNote = () => {
-    const newNote = createNote();
+  const handleNewNote = async () => {
+    const newNote = await createNote();
     setCurrentNote(newNote.id);
     toast({
       title: "New note created",
@@ -126,10 +133,10 @@ export function Notepad() {
   };
 
   // Apply template
-  const handleApplyTemplate = (template: any) => {
+  const handleApplyTemplate = async (template: any) => {
     if (currentNote) {
       const htmlContent = marked.parse(template.content) as string;
-      updateNote(currentNote.id, {
+      await updateNote(currentNote.id, {
         title: template.title,
         content: htmlContent,
         tags: template.tags || [],
@@ -319,19 +326,33 @@ export function Notepad() {
               className="text-lg font-semibold border-none shadow-none px-0 focus-visible:ring-0"
               placeholder="Enter note title..."
             />
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={generateAITitle}
-              disabled={isGeneratingTitle}
-              className="shrink-0"
-            >
-              {isGeneratingTitle ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <Sparkles className="w-4 h-4" />
-              )}
-            </Button>
+
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={generateAITitle}
+                    disabled={isGeneratingTitle}
+                    className="shrink-0"
+                  >
+                    {isGeneratingTitle ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Sparkles className="w-4 h-4" />
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="right"
+                  className="z-[9999]"
+                  avoidCollisions={false}
+                >
+                  <p>Generate an AI-powered title</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
 
           {currentNote.updatedAt && (
@@ -390,7 +411,9 @@ export function Notepad() {
         notes={notes}
         currentNoteId={currentNote.id}
         onSelectNote={setCurrentNote}
-        onDeleteNote={deleteNote}
+        onDeleteNote={async (noteId) => {
+          await deleteNote(noteId);
+        }}
         onCreateNote={handleNewNote}
         onUpdateNote={updateNote}
       />

@@ -3,7 +3,6 @@
 import type React from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Table from "@tiptap/extension-table";
 import TableRow from "@tiptap/extension-table-row";
 import TableHeader from "@tiptap/extension-table-header";
 import TableCell from "@tiptap/extension-table-cell";
@@ -45,9 +44,19 @@ import {
   SubscriptIcon,
   SuperscriptIcon,
   CheckSquare,
+  ChevronDown,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { Table } from "@tiptap/extension-table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
 const lowlight = createLowlight(common);
 
@@ -104,6 +113,7 @@ export function TipTapEditor({ content, onChange, noteId }: TipTapEditorProps) {
       }),
     ],
     content,
+    immediatelyRender: false,
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
@@ -126,7 +136,7 @@ export function TipTapEditor({ content, onChange, noteId }: TipTapEditorProps) {
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl max-w-none focus:outline-none p-6 h-full overflow-y-auto",
+          "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl max-w-none focus:outline-none p-6 h-full overflow-y-auto cursor-text first:cursor-text [&_*]:cursor-default selection:cursor-text",
       },
     },
   });
@@ -161,30 +171,14 @@ export function TipTapEditor({ content, onChange, noteId }: TipTapEditorProps) {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append("image", file);
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = reader.result as string;
 
-    try {
-      const res = await fetch("/api/upload-image", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await res.json();
-      const baseUrl =
-        process.env.NEXT_PUBLIC_BASE_URL;
-      const imageUrl = `${baseUrl.replace(/\/$/, "")}${data.url}`;
-
-      editor.chain().focus().setImage({ src: imageUrl, alt: file.name }).run();
-      toast({ title: "Image uploaded", description: "Image added to note." });
-    } catch (err) {
-      console.error("Image upload error:", err);
-      toast({
-        title: "Upload failed",
-        description: "Could not upload image. Try again.",
-        variant: "destructive",
-      });
-    }
+      editor.chain().focus().setImage({ src: base64, alt: file.name }).run();
+      toast({ title: "Image added", description: "Stored locally in note." });
+    };
+    reader.readAsDataURL(file);
   };
 
   const addLink = () => {
@@ -391,6 +385,105 @@ export function TipTapEditor({ content, onChange, noteId }: TipTapEditorProps) {
         <Button variant="ghost" size="sm" onClick={addTable}>
           <TableIcon className="w-4 h-4" />
         </Button>
+
+        {/* Table Tools Dropdown – visible only if inside a table */}
+        {editor.isActive("table") && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm">
+                <ChevronDown className="w-4 h-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-52">
+              <DropdownMenuLabel>Table Tools</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => editor.chain().focus().addColumnBefore().run()}
+              >
+                Add Column Before
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => editor.chain().focus().addColumnAfter().run()}
+              >
+                Add Column After
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => editor.chain().focus().deleteColumn().run()}
+              >
+                Delete Column
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => editor.chain().focus().addRowBefore().run()}
+              >
+                Add Row Before
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => editor.chain().focus().addRowAfter().run()}
+              >
+                Add Row After
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => editor.chain().focus().deleteRow().run()}
+              >
+                Delete Row
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => editor.chain().focus().deleteTable().run()}
+              >
+                Delete Table
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => editor.chain().focus().mergeCells().run()}
+              >
+                Merge Cells
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => editor.chain().focus().splitCell().run()}
+              >
+                Split Cell
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
+                  editor.chain().focus().toggleHeaderColumn().run()
+                }
+              >
+                Toggle Header Column
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => editor.chain().focus().toggleHeaderRow().run()}
+              >
+                Toggle Header Row
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => editor.chain().focus().toggleHeaderCell().run()}
+              >
+                Toggle Header Cell
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => editor.chain().focus().mergeOrSplit().run()}
+              >
+                Merge / Split
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => editor.chain().focus().fixTables().run()}
+              >
+                Fix Tables
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => editor.chain().focus().goToNextCell().run()}
+              >
+                Go to Next Cell
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => editor.chain().focus().goToPreviousCell().run()}
+              >
+                Go to Previous Cell
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
 
         <Separator orientation="vertical" className="h-6 mx-1" />
 
